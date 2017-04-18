@@ -1,0 +1,24 @@
+{
+  "name": "thonk9k",
+  "version": "1.0.0",
+  "description": "Discord EVE bot built on discord.js & node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emensch/thonk9k.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emensch/thonk9k/issues"
+  },
+  "homepage": "https://github.com/emensch/thonk9k#readme",
+  "dependencies": {
+    "discord.js": "^11.0.0",
+    "uws": "^0.14.1"
+  }
+}
