@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
+const sqlite3 = require('sqlite3').verbose();
 const glob = require('glob');
 const path = require('path');
 
 class Bot {
     constructor() {
         this.client = new Discord.Client();
+        this.db = new sqlite3.Database(path.join(__dirname, '../db/database.db'));
         this.token = 'MzAzMzI4NjQzNTUwMDE5NTg2.C9Wgwg.2SjC-LzYWuLNGPdhG0F0axdAqtM';
         this.commandPrefix = '!';
         this.commands = {};
