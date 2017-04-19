@@ -17,7 +17,11 @@ class Bot {
     }
 
     thonk() {
-        this.client.login(this.token)
+        this.client.login(this.token);
+
+        this.client.on('message', message => {
+            this.runCommand(message)
+        })
     }
 
     loadCommands() {
@@ -37,6 +41,22 @@ class Bot {
         this.commands[command.command] = {
             description: command.description,
             execute: command.execute
+        }
+    }
+
+    runCommand(message) {
+        const prefix = '!';
+        const content = message.content;
+
+        if(content.startsWith(prefix)) {
+            const formattedContent = content.slice(prefix.length, content.length);
+            const command = formattedContent.split(' ')[0];
+
+            if(this.commands.hasOwnProperty(command)) {
+                console.log(this.commands[command].description);
+            } else {
+                message.channel.sendMessage('Command not recognized. Try !help for a list of available commands.');
+            }
         }
     }
 
