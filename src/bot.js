@@ -50,10 +50,13 @@ class Bot {
 
         if(content.startsWith(prefix)) {
             const formattedContent = content.slice(prefix.length, content.length);
-            const command = formattedContent.split(' ')[0];
+            const commandArray = formattedContent.split(' ');
+            const command = commandArray[0];
+            const args = commandArray[1];
 
             if(this.commands.hasOwnProperty(command)) {
-                console.log(this.commands[command].description);
+                const selectedCommand = this.commands[command];
+                selectedCommand.execute(this, message, args)
             } else {
                 message.channel.sendMessage('Command not recognized. Try !help for a list of available commands.');
             }
