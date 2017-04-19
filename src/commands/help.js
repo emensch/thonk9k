@@ -7,7 +7,7 @@ module.exports = {
         const keys = Object.keys(bot.commands);
 
         for(key of keys) {
-            response += '!' + key + ': ' + bot.commands[key].description + '\n'
+            response += bot.commandPrefix + key + ': ' + bot.commands[key].description + '\n'
         }
 
         message.channel.sendMessage(response)
