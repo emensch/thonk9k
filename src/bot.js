@@ -6,6 +6,7 @@ class Bot {
     constructor() {
         this.client = new Discord.Client();
         this.token = 'MzAzMzI4NjQzNTUwMDE5NTg2.C9Wgwg.2SjC-LzYWuLNGPdhG0F0axdAqtM';
+        this.commandPrefix = '!';
         this.commands = {};
         this.cmdCount = 0;
 
@@ -45,14 +46,14 @@ class Bot {
     }
 
     runCommand(message) {
-        const prefix = '!';
+        const prefix = this.commandPrefix;
         const content = message.content;
 
         if(content.startsWith(prefix)) {
             const formattedContent = content.slice(prefix.length, content.length);
-            const commandArray = formattedContent.split(' ');
-            const command = commandArray[0];
-            const args = commandArray[1];
+            let commandArray = formattedContent.split(' ');
+            const command = commandArray.shift();
+            const args = commandArray.join(' ');
 
             if(this.commands.hasOwnProperty(command)) {
                 const selectedCommand = this.commands[command];
