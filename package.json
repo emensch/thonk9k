@@ -19,6 +19,7 @@
   "homepage": "https://github.com/emensch/thonk9k#readme",
   "dependencies": {
     "discord.js": "^11.0.0",
+    "glob": "^7.1.1",
     "uws": "^0.14.1"
   }
 }

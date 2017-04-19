@@ -16,6 +16,7 @@ class Bot {
     }
 
 
+
     //client.on('message', message => {
     //    message.react(':thonking:291056594601377792')
     //});
