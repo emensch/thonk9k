@@ -55,6 +55,7 @@ class Bot {
             if (err) {
                 console.error(err);
             } else {
+                console.log(command.trigger + ' loaded');
                 let formatted = command.trigger.toLowerCase();
                 this.commands[formatted] = command;
                 this.cmdCount++;
