@@ -55,7 +55,8 @@ class Bot {
             if (err) {
                 console.error(err);
             } else {
-                this.commands[command.trigger] = command;
+                let formatted = command.trigger.toLowerCase();
+                this.commands[formatted] = command;
                 this.cmdCount++;
             }
         });
@@ -68,7 +69,7 @@ class Bot {
         if (content.startsWith(prefix)) {
             const formattedContent = content.slice(prefix.length, content.length);
             let commandArray = formattedContent.split(' ');
-            const command = commandArray.shift();
+            const command = commandArray.shift().toLowerCase();
             const args = commandArray.join(' ');
 
             if (this.commands.hasOwnProperty(command)) {
