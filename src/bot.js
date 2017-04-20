@@ -29,35 +29,49 @@ class Bot {
 
     loadCommands() {
         console.log('Loading commands...');
+        let classMap = {};
 
         glob.sync(path.join(__dirname, 'commands/*.js')).forEach( file => {
-            this.addCommand(require(path.resolve(file)));
-            this.cmdCount++
+            let cmdObj = require(path.resolve(file));
+
+            // Only add if file exports something
+            if(typeof cmdObj === 'function') {
+                classMap[cmdObj.name] = cmdObj;
+            }
         });
 
-        console.log(this.commands);
+        // Iterate through keys and instantiate command objects
+        // ES6 doesn't really like "dynamic" class names
+        // This is OK because I hate myself and no one else will ever see this
+        Object.keys(classMap).forEach( key => {
+            this.addCommand(new classMap[key]())
+        });
 
         console.log(`Finished loading ${this.cmdCount} commands.`)
     }
 
     addCommand(command) {
-        this.commands[command.command] = {
-            description: command.description,
-            execute: command.execute
-        }
+        command.onLoad(this, err => {
+            if (err) {
+                console.error(err);
+            } else {
+                this.commands[command.trigger] = command;
+                this.cmdCount++;
+            }
+        });
     }
 
     runCommand(message) {
         const prefix = this.commandPrefix;
         const content = message.content;
 
-        if(content.startsWith(prefix)) {
+        if (content.startsWith(prefix)) {
             const formattedContent = content.slice(prefix.length, content.length);
             let commandArray = formattedContent.split(' ');
             const command = commandArray.shift();
             const args = commandArray.join(' ');
 
-            if(this.commands.hasOwnProperty(command)) {
+            if (this.commands.hasOwnProperty(command)) {
                 const selectedCommand = this.commands[command];
                 selectedCommand.execute(this, message, args)
             } else {
