@@ -1,4 +1,5 @@
 const Command = require('../command');
+const request = require ('request');
 
 class GetPrice extends Command {
     constructor() {
@@ -23,13 +24,36 @@ class GetPrice extends Command {
                 const error = new Error('typeIDs table does not exist. Run the loadTypeIDs util.');
                 cb(error)
             }
-        })
+        });
 
         cb();
     }
 
     execute(bot, message, args) {
-        message.channel.sendMessage(args);
+        bot.lookupTypeID(args, (err, id) => {
+            if (err) {
+                message.channel.sendMessage(err.message);
+                return;
+            }
+
+            request(`http://api.eve-central.com/api/marketstat/json?typeid=${id}&usesystem=30000142`, (err, res, body) => {
+                if (err) {
+                    message.channel.sendMessage('Ya fucked up');
+                    return;
+                }
+
+                const parsed = JSON.parse(body)[0];
+                const sellFivePercent = bot.humanizeNumber(parsed.sell.fivePercent);
+                const buyFivePercent = bot.humanizeNumber(parsed.buy.fivePercent);
+
+                message.channel.sendMessage(
+                    `__Price of **${args}** in Jita:__\n` +
+                    `**Sell**: ${sellFivePercent} ISK\n` +
+                    `**Buy**: ${buyFivePercent} ISK`
+                )
+
+            });
+        });
     }
 }
 
