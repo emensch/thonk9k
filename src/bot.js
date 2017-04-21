@@ -82,6 +82,39 @@ class Bot {
         }
     }
 
+    // Utility method to lookup typeID from typeName
+    lookupTypeID(typeName, cb) {
+        this.db.get(`
+            SELECT typeID from typeIDs
+            WHERE typeName = ?
+        `, typeName, (err, row) => {
+            if (err) {
+                cb(err);
+                return;
+            }
+
+            if(typeof row === 'undefined') {
+                cb(new Error('That item does not exist.'));
+                return;
+            }
+
+            cb(null, row.typeID)
+        })
+    }
+
+    humanizeNumber(num) {
+        const strNum = num.toFixed(2).toString();
+        const places = strNum.indexOf('.');
+
+        if (places < 7) {
+            // I absolutely ripped this regex off StackOverflow
+            return strNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        const truncated = num / 10 ** (Math.floor((places - 1)/3) * 3);
+        return truncated.toFixed(2) + (places > 9 ? 'b' : 'm');
+
+    }
 
     //client.on('message', message => {
     //    message.react(':thonking:291056594601377792')
