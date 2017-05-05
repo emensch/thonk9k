@@ -1,12 +1,14 @@
 const Discord = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
+const db = require('sqlite');
 const glob = require('glob');
 const path = require('path');
 
 class Bot {
     constructor() {
         this.client = new Discord.Client();
-        this.db = new sqlite3.Database(path.join(__dirname, '../db/database.db'));
+        //this.db = new sqlite3.Database(path.join(__dirname, '../db/database.db'));
+        this.db = db;
         this.token = 'MzAzMzI4NjQzNTUwMDE5NTg2.C9Wgwg.2SjC-LzYWuLNGPdhG0F0axdAqtM';
         this.commandPrefix = '!';
         this.commands = {};
@@ -20,7 +22,13 @@ class Bot {
     }
 
     thonk() {
-        this.client.login(this.token);
+        db.open(path.join(__dirname, '../db/database.db'))
+            .then(() => {
+                this.client.login(this.token);
+            })
+            .catch((err) => {
+                console.error(err)
+            });
 
         this.client.on('message', message => {
             this.runCommand(message)
@@ -83,23 +91,31 @@ class Bot {
     }
 
     // Utility method to lookup typeID from typeName
-    lookupTypeID(typeName, cb) {
-        this.db.get(`
+    lookupTypeID(typeName) {
+        return this.db.get(`
             SELECT typeID from typeIDs
             WHERE typeName = ?
-        `, typeName, (err, row) => {
-            if (err) {
-                cb(err);
-                return;
-            }
+        `)
+            .then(row => {
+                return row
+            })
+            .catch(err => {
+                console.error(err)
+            });
 
-            if(typeof row === 'undefined') {
-                cb(new Error('That item does not exist.'));
-                return;
-            }
-
-            cb(null, row.typeID)
-        })
+        //    , typeName, (err, row) => {
+        //    if (err) {
+        //        cb(err);
+        //        return;
+        //    }
+        //
+        //    if(typeof row === 'undefined') {
+        //        cb(new Error('That item does not exist.'));
+        //        return;
+        //    }
+        //
+        //    cb(null, row.typeID)
+        //})
     }
 
     humanizeNumber(num) {

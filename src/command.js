@@ -8,8 +8,8 @@ class Command {
 
     }
 
-    onLoad(bot, cb) {
-        cb();
+    onLoad(bot) {
+        return Promise.resolve()
     }
 }
 
