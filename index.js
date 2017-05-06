@@ -1,5 +1,4 @@
-const Thonk9k = require('./src/bot');
+import bot from './src/bot'
 
-const bot = new Thonk9k();
-bot.thonk();
-
+const thonk9k = bot('MzAzMzI4NjQzNTUwMDE5NTg2.C9Wgwg.2SjC-LzYWuLNGPdhG0F0axdAqtM');
+thonk9k.init();

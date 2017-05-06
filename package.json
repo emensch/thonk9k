@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "babel-node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,12 +18,17 @@
   },
   "homepage": "https://github.com/emensch/thonk9k#readme",
   "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
     "csv-parse": "^1.2.0",
     "discord.js": "^11.0.0",
     "glob": "^7.1.1",
+    "js-yaml": "^3.8.3",
     "request": "^2.81.0",
     "sqlite": "^2.5.0",
-    "sqlite3": "^3.1.8",
     "uws": "^0.14.1"
+  },
+  "babel": {
+    "presets": ["env"]
   }
 }
