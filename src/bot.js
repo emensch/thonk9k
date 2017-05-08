@@ -6,7 +6,9 @@ import path from 'path'
 export default (token, {prefix = '!'} = {}) => {
     let state = {
         client: new Discord.Client(),
-        db: null
+        db: null,
+        commands: {},
+        tickers: []
     };
 
     if(!token) {
@@ -15,18 +17,33 @@ export default (token, {prefix = '!'} = {}) => {
 
     async function getDB() {
         try {
-            const dbpath = path.join(__dirname, '../database/database.sqlite');
+            const dbpath = path.resolve(__dirname, '../database/database.sqlite');
             return sqlite.open(dbpath)
         } catch(e) {
             console.error(e)
         }
     }
 
+    function loadModules(modulePath) {
+        glob.sync(modulePath).forEach( file => {
+            let module = require(path.resolve(file)).default;
+            // Only add if file exports something
+            if(typeof module === 'object') {
+                try {
+                    module.load(state)
+                } catch(e) {
+                    console.error(e)
+                }
+            }
+        });
+    }
+
     return Object.create({
         async init() {
             try {
                 state.db = await getDB();
-                state.client.login(token);
+                loadModules(path.resolve(__dirname, 'core/*'));
+                //state.client.login(token);
 
                 state.client.on('ready', () => {
                     console.log('Thonking.')
