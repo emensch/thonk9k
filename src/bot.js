@@ -2,13 +2,13 @@ import Discord from 'discord.js'
 import sqlite from 'sqlite'
 import glob from 'glob'
 import path from 'path'
+import moduleStore from './moduleStore'
 
 export default (token, {prefix = '!'} = {}) => {
     let state = {
         client: new Discord.Client(),
         db: null,
-        commands: {},
-        tickers: []
+        modules: moduleStore()
     };
 
     if(!token) {
@@ -36,6 +36,8 @@ export default (token, {prefix = '!'} = {}) => {
                 }
             }
         });
+
+        console.log(state.modules.getCommands())
     }
 
     return Object.create({
@@ -43,6 +45,7 @@ export default (token, {prefix = '!'} = {}) => {
             try {
                 state.db = await getDB();
                 loadModules(path.resolve(__dirname, 'core/*'));
+                loadModules(path.resolve(__dirname, 'modules/*'));
                 //state.client.login(token);
 
                 state.client.on('ready', () => {
