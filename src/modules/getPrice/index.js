@@ -10,8 +10,10 @@ export default module(
     }),
     command('getprice', 'Gets the Jita price of a given item.', async (state, message, args) => {
         try {
+            const esiURL = 'https://esi.tech.ccp.is/latest/';
+
             const {data: itemData} = await axios.get(
-                `https://esi.tech.ccp.is/latest/search/?categories=inventorytype&datasource=tranquility&language=en-us&search=${args}`
+                `${esiURL}search/?categories=inventorytype&datasource=tranquility&language=en-us&search=${args}`
             );
 
             const itemid = itemData.inventorytype[0];
