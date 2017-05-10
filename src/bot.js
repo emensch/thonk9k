@@ -6,6 +6,7 @@ import moduleStore from './moduleStore'
 
 export default (token, {prefix = '!'} = {}) => {
     let state = {
+        commandPrefix: prefix,
         client: new Discord.Client(),
         db: null,
         modules: moduleStore()
@@ -36,8 +37,25 @@ export default (token, {prefix = '!'} = {}) => {
                 }
             }
         });
+    }
 
-        console.log(state.modules.getCommands())
+    function processMessage(message) {
+        const content = message.content;
+        if (content.startsWith(prefix)) {
+            const formatted = content.slice(prefix.length, content.length);
+            let commandArray = formatted.split(' ');
+            const trigger = commandArray.shift().toLowerCase();
+            const args = commandArray.join(' ');
+            const command = state.modules.getCommand(trigger);
+
+            if(command) {
+                command.executeFn(state, message, args)
+            } else {
+                message.channel.sendMessage(
+                    `Command not recognized. Try ${prefix}help for a list of all available commands.`
+                )
+            }
+        }
     }
 
     return Object.create({
@@ -46,11 +64,15 @@ export default (token, {prefix = '!'} = {}) => {
                 state.db = await getDB();
                 loadModules(path.resolve(__dirname, 'core/*'));
                 loadModules(path.resolve(__dirname, 'modules/*'));
-                //state.client.login(token);
+                state.client.login(token);
 
                 state.client.on('ready', () => {
                     console.log('Thonking.')
-                })
+                });
+
+                state.client.on('message', message => {
+                    processMessage(message)
+                });
             } catch(e) {
                 console.error(e)
             }

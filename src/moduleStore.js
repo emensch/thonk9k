@@ -17,6 +17,14 @@ export default () => {
 
         getTickers() {
             return tickers
+        },
+
+        getCommand(trigger) {
+            if (commands.hasOwnProperty(trigger)) {
+                return commands[trigger]
+            } else {
+                return false
+            }
         }
     })
 }
