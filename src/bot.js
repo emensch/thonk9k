@@ -49,7 +49,11 @@ export default (token, {prefix = '!'} = {}) => {
             const command = state.modules.getCommand(trigger);
 
             if(command) {
-                command.executeFn(state, message, args)
+                try {
+                    command.executeFn(state, message, args)
+                } catch(e) {
+                    message.channel.sendMessage('You blew it.')
+                }
             } else {
                 message.channel.sendMessage(
                     `Command not recognized. Try ${prefix}help for a list of all available commands.`
