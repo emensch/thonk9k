@@ -39,7 +39,7 @@ export default (token, {prefix = '!'} = {}) => {
         });
     }
 
-    function processMessage(message) {
+    async function processMessage(message) {
         const content = message.content;
         if (content.startsWith(prefix)) {
             const formatted = content.slice(prefix.length, content.length);
@@ -50,7 +50,7 @@ export default (token, {prefix = '!'} = {}) => {
 
             if(command) {
                 try {
-                    command.executeFn(state, message, args)
+                    await command.executeFn(state, message, args)
                 } catch(e) {
                     message.channel.sendMessage('You blew it.')
                 }
