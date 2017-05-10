@@ -1,4 +1,5 @@
 import bot from './src/bot'
+import config from './config.json'
 
-const thonk9k = bot('MzAzMzI4NjQzNTUwMDE5NTg2.C9Wgwg.2SjC-LzYWuLNGPdhG0F0axdAqtM');
+const thonk9k = bot(config.token);
 thonk9k.init();

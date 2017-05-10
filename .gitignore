@@ -38,3 +38,6 @@ jspm_packages
 
 # Sqlite3 DB file
 database/*.sqlite
+
+# Config
+config.json
