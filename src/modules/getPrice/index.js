@@ -1,13 +1,9 @@
 import module from '../../module'
 import command from '../../components/command'
-import loader from '../../components/loader'
 import axios from 'axios'
 import humanize from '../../utils/humanize'
 
 export default module(
-    loader(() => {
-        console.log('test')
-    }),
     command('getprice', 'Gets the Jita price of a given item.', async (state, message, args) => {
         try {
             const esiURL = 'https://esi.tech.ccp.is/latest/';

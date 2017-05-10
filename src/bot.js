@@ -50,14 +50,15 @@ export default (token, {prefix = '!'} = {}) => {
 
             if(command) {
                 try {
-                    await command.executeFn(state, message, args)
+                    await command.executeFn(state, message, args);
                 } catch(e) {
-                    message.channel.sendMessage('You blew it.')
+                    console.error(e);
+                    message.channel.sendMessage('You blew it.');
                 }
             } else {
                 message.channel.sendMessage(
                     `Command not recognized. Try ${prefix}help for a list of all available commands.`
-                )
+                );
             }
         }
     }

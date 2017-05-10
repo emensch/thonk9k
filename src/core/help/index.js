@@ -1,7 +1,5 @@
 import module from '../../module'
 import command from '../../components/command'
-import loader from '../../components/loader'
-
 
 export default module(
     command('help', 'Lists all commands alongside their description.', (state, message, args) => {
