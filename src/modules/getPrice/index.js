@@ -5,9 +5,9 @@ import loader from '../../components/loader'
 
 export default module(
     loader(() => {
-        throw new Error('dick')
+        console.log('test')
     }),
-    command('getPrice', 'Gets the Jita price of a given item.', () => {
+    command('getprice', 'Gets the Jita price of a given item.', () => {
         console.log('running getPrice')
     })
 )
