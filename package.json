@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/emensch/thonk9k#readme",
   "dependencies": {
+    "axios": "^0.16.1",
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.4.0",
     "discord.js": "^11.0.0",
