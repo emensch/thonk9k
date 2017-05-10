@@ -1,0 +1,90 @@
+import module from '../../module'
+import command from '../../components/command'
+import loader from '../../components/loader'
+import axios from 'axios'
+import humanize from '../../utils/humanize'
+import fs from 'fs'
+import path from 'path'
+
+export default module(
+    loader(async state => {
+        try {
+            const exists = await state.db.get(`
+                SELECT name FROM sqlite_master
+                WHERE type='table' AND
+                name='implantSetIDs'
+            `);
+
+            if (!exists) {
+                console.log('Generating implantSetIDs table...');
+                const filePath = path.resolve(__dirname, 'implantIDs.json');
+
+                const file = fs.readFileSync(filePath, {encoding: 'utf8'});
+                const implantIDs = JSON.parse(file);
+
+                await state.db.run(`
+                    CREATE TABLE IF NOT EXISTS implantSetIDs (
+                        setName TEXT PRIMARY KEY,
+                        IDs TEXT
+                    )
+                `);
+
+                for(let key in implantIDs) {
+                    await state.db.run(`
+                        INSERT INTO implantSetIDs (setName, IDs)
+                        VALUES ($setName, $IDs)
+                    `, {
+                        $setName: key,
+                        $IDs: JSON.stringify(implantIDs[key])
+                    })
+                }
+
+                console.log('Done.')
+            }
+        } catch(e) {
+            if(e.code === 'ENOENT') {
+                console.error('implantIDs.json could not be accessed.')
+            } else {
+                throw e
+            }
+        }
+    }),
+    command('getsetprice', 'Gets the Jita price of a given implant set.', async (state, message, args) => {
+        try {
+            const {IDs} = await state.db.get(`SELECT IDs FROM implantSetIDs WHERE setName = $setName`, {
+                $setName: args.toLowerCase()
+            });
+
+            const parsedIDs = JSON.parse(IDs);
+
+            const queryString = parsedIDs.map(e => {
+                return `typeid=${e}&`
+            }).join('');
+
+            const {data: priceData} = await axios.get(
+                `http://api.eve-central.com/api/marketstat/json?${queryString}usesystem=30000142`
+            );
+
+            const buyPrice = humanize(sumPrice('buy', priceData));
+            const sellPrice = humanize(sumPrice('sell', priceData));
+
+            message.channel.sendMessage(
+                `__Price of **${args}** set in Jita__:\n` +
+                `**Sell**: ${sellPrice} ISK\n` +
+                `**Buy**: ${buyPrice} ISK`
+            )
+
+        } catch(e) {
+            console.error(e);
+            throw e
+        }
+    })
+)
+
+function sumPrice(key, priceData) {
+    return priceData.map(e => {
+        return e[key].fivePercent
+    }).reduce((acc, val) => {
+        return acc + val
+    });
+}
