@@ -51,8 +51,8 @@ export default module(
     }),
     command('getsetprice', 'Gets the Jita price of a given implant set.', async (state, message, args) => {
         try {
-            const {IDs} = await state.db.get(`SELECT IDs FROM implantSetIDs WHERE setName = $setName`, {
-                $setName: args.toLowerCase()
+            const {setName, IDs} = await state.db.get(`SELECT * FROM implantSetIDs WHERE setName LIKE '%'||$setName||'%'`, {
+                $setName: args
             });
 
             const parsedIDs = JSON.parse(IDs);
@@ -69,7 +69,7 @@ export default module(
             const sellPrice = humanize(sumPrice('sell', priceData));
 
             message.channel.sendMessage(
-                `__Price of **${args}** set in Jita__:\n` +
+                `__Price of **${setName}** set in Jita__:\n` +
                 `**Sell**: ${sellPrice} ISK\n` +
                 `**Buy**: ${buyPrice} ISK`
             )
