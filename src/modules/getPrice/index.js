@@ -14,15 +14,16 @@ export default module(
 
             const itemid = itemData.inventorytype[0];
 
-            const {data: priceData} = await axios.get(
-                `http://api.eve-central.com/api/marketstat/json?typeid=${itemid}&usesystem=30000142`
-            );
+            const [{data: [priceData]}, {data: {name: itemName}}] = await Promise.all([
+                axios.get(`http://api.eve-central.com/api/marketstat/json?typeid=${itemid}&usesystem=30000142`),
+                axios.get(`${esiURL}universe/types/${itemid}/?datasource=tranquility&language=en-us`)
+            ]);
 
-            const sellFivePercent = humanize(priceData[0].sell.fivePercent);
-            const buyFivePercent = humanize(priceData[0].buy.fivePercent);
+            const sellFivePercent = humanize(priceData.sell.fivePercent);
+            const buyFivePercent = humanize(priceData.buy.fivePercent);
 
             message.channel.sendMessage(
-                `__Price of **${args}** (or nearest match) in Jita__:\n` +
+                `__Price of **${itemName}** in Jita__:\n` +
                 `**Sell**: ${sellFivePercent} ISK\n` +
                 `**Buy**: ${buyFivePercent} ISK`
             )
