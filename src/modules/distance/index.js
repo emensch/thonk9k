@@ -22,7 +22,7 @@ export default module(
                 axios.get(`${esiURL}route/${startID}/${endID}/?datasource=tranquility&flag=secure`)
             ]);
 
-            message.channel.sendMessage(
+            message.channel.send(
                 `__Distance between **${start}** and **${end}**__:\n` +
                 `**Shortest**: **${shortestRoute.length - 1}** jumps\n` +
                 `**Safest**: **${safestRoute.length - 1}** jumps`

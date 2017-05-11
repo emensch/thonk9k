@@ -22,7 +22,7 @@ export default module(
             const sellFivePercent = humanize(priceData.sell.fivePercent);
             const buyFivePercent = humanize(priceData.buy.fivePercent);
 
-            message.channel.sendMessage(
+            message.channel.send(
                 `__Price of **${itemName}** in Jita__:\n` +
                 `**Sell**: ${sellFivePercent} ISK\n` +
                 `**Buy**: ${buyFivePercent} ISK`

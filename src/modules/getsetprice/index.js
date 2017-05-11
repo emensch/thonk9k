@@ -68,7 +68,7 @@ export default module(
             const buyPrice = humanize(sumPrice('buy', priceData));
             const sellPrice = humanize(sumPrice('sell', priceData));
 
-            message.channel.sendMessage(
+            message.channel.send(
                 `__Price of **${setName}** set in Jita__:\n` +
                 `**Sell**: ${sellPrice} ISK\n` +
                 `**Buy**: ${buyPrice} ISK`
