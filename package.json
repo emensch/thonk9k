@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "babel-node src/index.js",
-    "build": "rm -rf dist && babel src --out-dir dist --plugins transform-runtime",
+    "build": "rm -rf dist && babel src --out-dir dist --copy-files --plugins transform-runtime",
     "start": "node dist/index.js"
   },
   "repository": {
