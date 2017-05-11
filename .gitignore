@@ -41,3 +41,6 @@ database/*.sqlite
 
 # Config
 config.json
+
+# Built files
+dist/
