@@ -25,18 +25,20 @@ export default (token, {prefix = '!'} = {}) => {
         }
     }
 
-    function loadModules(modulePath) {
-        glob.sync(modulePath).forEach( file => {
+    async function loadModules(modulePath) {
+        let files = glob.sync(modulePath);
+
+        for(let file of files) {
             let module = require(path.resolve(file)).default;
             // Only add if file exports something
-            if(typeof module === 'object') {
+            if (typeof module === 'object') {
                 try {
-                    module.load(state)
-                } catch(e) {
+                    await module.load(state)
+                } catch (e) {
                     console.error(e)
                 }
             }
-        });
+        }
     }
 
     async function processMessage(message) {
@@ -67,8 +69,8 @@ export default (token, {prefix = '!'} = {}) => {
         async init() {
             try {
                 state.db = await getDB();
-                loadModules(path.resolve(__dirname, 'core/*'));
-                loadModules(path.resolve(__dirname, 'modules/*'));
+                await loadModules(path.resolve(__dirname, 'core/*'));
+                await loadModules(path.resolve(__dirname, 'modules/*'));
                 state.client.login(token);
 
                 state.client.on('ready', () => {

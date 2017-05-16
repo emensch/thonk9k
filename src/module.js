@@ -6,10 +6,10 @@ export default (...components) => {
     });
 
     let proto = {
-        load(state) {
-            loaders.forEach(loader => {
-                loader(state)
-            })
+        async load(state) {
+            for(let loader of loaders) {
+                await loader(state)
+            }
         }
     };
 
