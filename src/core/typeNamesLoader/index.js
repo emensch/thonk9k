@@ -1,6 +1,7 @@
 import module from '../../module'
 import loader from '../../components/loader'
-import { exec } from 'child-process-promise'
+import download from 'download'
+import bzip2 from 'seek-bzip'
 import parse from 'csv-parse/lib/sync'
 
 export default module(
@@ -14,16 +15,11 @@ export default module(
 
             if (!exists) {
                 // This is terrible and I hate myself but we do what we must
-                // Also no one else will ever see this, but if they do:
-                // TODO: Refactor to use NPM packages or something more elegant than this BS
                 console.log('Generating typeNames table...');
                 console.log('Downloading invTypes data...');
 
-                const {stdout: csv} = await exec(
-                    'curl https://www.fuzzwork.co.uk/dump/latest/invTypes.csv.bz2 | gunzip', {
-                    maxBuffer: 1024 * 1024 * 20, // 20 MB,
-                    encoding: 'utf-8'
-                });
+                const file = await download('https://www.fuzzwork.co.uk/dump/latest/invTypes.csv.bz2');
+                const csv = bzip2.decode(file);
 
                 console.log('Parsing...');
 
