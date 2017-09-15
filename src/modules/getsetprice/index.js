@@ -57,12 +57,20 @@ export default module(
 
             const parsedIDs = JSON.parse(IDs);
 
+            // const queryString = parsedIDs.map(e => {
+            //     return `typeid=${e}&`
+            // }).join('');
+
             const queryString = parsedIDs.map(e => {
-                return `typeid=${e}&`
+                return `${e},`
             }).join('');
 
+            // const {data: priceData} = await axios.get(
+            //     `http://api.eve-central.com/api/marketstat/json?${queryString}usesystem=30000142`
+            // );
+
             const {data: priceData} = await axios.get(
-                `http://api.eve-central.com/api/marketstat/json?${queryString}usesystem=30000142`
+                `https://market.fuzzwork.co.uk/aggregates/?station=60003760&types=${queryString}`
             );
 
             const buyPrice = humanize(sumPrice('buy', priceData));
@@ -81,10 +89,20 @@ export default module(
     })
 )
 
+// function sumPrice(key, priceData) {
+//     console.log('priceData', priceData);
+//     return priceData.map(e => {
+//         return e[key].fivePercent
+//     }).reduce((acc, val) => {
+//         return acc + val
+//     });
+// }
+
 function sumPrice(key, priceData) {
-    return priceData.map(e => {
-        return e[key].fivePercent
-    }).reduce((acc, val) => {
-        return acc + val
-    });
+    let sum = 0;
+    for(const ID in priceData) {
+        sum += parseFloat(priceData[ID][key].percentile)
+    }
+
+    return sum
 }

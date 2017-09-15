@@ -1,5 +1,5 @@
 export default num => {
-    const strNum = num.toFixed(2).toString();
+    const strNum = parseInt(num, 10).toFixed(2).toString();
     const places = strNum.indexOf('.');
 
     if (places < 7) {

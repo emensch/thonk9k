@@ -37,12 +37,21 @@ export default module(
             if(typeof result !== "undefined") {
                 const {ID, typeName} = result;
 
-                const {data: [priceData]} = await axios.get(
-                    `http://api.eve-central.com/api/marketstat/json?typeid=${ID}&usesystem=30000142`
+                // const {data: [priceData]} = await axios.get(
+                //     //`http://api.eve-central.com/api/marketstat/json?typeid=${ID}&usesystem=30000142`
+                // );
+
+                const {data} = await axios.get(
+                    `https://market.fuzzwork.co.uk/aggregates/?station=60003760&types=${ID}`
                 );
 
-                const sellFivePercent = humanize(priceData.sell.fivePercent);
-                const buyFivePercent = humanize(priceData.buy.fivePercent);
+                const priceData = (data[ID])
+
+                // const sellFivePercent = humanize(priceData.sell.fivePercent);
+                // const buyFivePercent = humanize(priceData.buy.fivePercent);
+
+                const sellFivePercent = humanize(priceData.sell.percentile);
+                const buyFivePercent = humanize(priceData.buy.percentile);
 
                 message.channel.send(
                     `__Price of **${typeName}** in Jita__:\n` +
