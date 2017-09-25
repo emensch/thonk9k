@@ -2,7 +2,7 @@ import module from '../../module';
 import command from '../../components/command';
 
 export default module(
-    command('triggerXavier', 'Triggers Xavier because he loves it', async (state, message, args) => {
+    command('triggerxavier', 'Triggers Xavier because he loves it', async (state, message, args) => {
         try {
             const triggeringMessages = [
                 'funkadelic is shit',
@@ -20,5 +20,5 @@ export default module(
         } catch (e) {
             throw e;
         }
-    });
+    })
 )
