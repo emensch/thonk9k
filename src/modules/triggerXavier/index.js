@@ -12,7 +12,7 @@ export default module(
                 // i guess more stuff that triggers papa X goes here
             ];
 
-            const selectedIndex = Math.floor(Math.random() * triggeringMessages.length) + 1;
+            const selectedIndex = Math.floor(Math.random() * triggeringMessages.length);
 
             message.channel.send(
                 triggeringMessages[selectedIndex]
