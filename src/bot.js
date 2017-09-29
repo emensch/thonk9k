@@ -12,6 +12,15 @@ export default (token, {prefix = '!'} = {}) => {
         modules: moduleStore()
     };
 
+    const triggered = [
+        'REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
+        'OH MY FUCKING GOD XAVIER GET YOUR FUCKING SHIT TOGETHER',
+        'You blew it.', // FOR THE OG'S
+        'im literally so triggered right fucking now...like....you have NO. FUUCKING. IDEA. OMGSDFSDFASDQBVQERWBVQERVGERBVNEHRIBNERBIEQRBNKIDFB',
+        'https://giphy.com/gifs/vk7VesvyZEwuI',
+        'https://giphy.com/gifs/nba-h3h3productions-linuxmasterrace-cVG2i8kfmgETe'
+    ];
+
     if(!token) {
         throw new Error('No token specified')
     }
@@ -55,7 +64,8 @@ export default (token, {prefix = '!'} = {}) => {
                     await command.executeFn(state, message, args);
                 } catch(e) {
                     console.error(e);
-                    message.channel.sendMessage('You blew it.');
+                    const triggeredIndex = Math.floor(Math.random() * triggered.length);
+                    message.channel.sendMessage(triggered[triggeredIndex]);
                 }
             } else {
                 message.channel.sendMessage(
