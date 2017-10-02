@@ -15,9 +15,11 @@ export default module(
             ];
 
             const selectedIndex = Math.floor(Math.random() * triggeringMessages.length);
+            const xavier = message.channel.guild.members.find(m => m.user.username === 'Xavier W')
+            const prefix = xavier ? xavier + ' ' : '';
 
             message.channel.send(
-                '@Xavier W#8307 ' + triggeringMessages[selectedIndex]
+               prefix + triggeringMessages[selectedIndex]
             );
         } catch (e) {
             throw e;
