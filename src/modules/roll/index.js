@@ -3,7 +3,7 @@ import command from '../../components/command'
 import axios from 'axios'
 
 export default module(
-    command('roll', 'Rolls a die. Optimal parameter specifies sides - defaults to 20.', async (state, message, args) => {
+    command('roll', 'Rolls a die. Optional parameter specifies sides - defaults to 20.', async (state, message, args) => {
         try {
             const sides = args.split(' ')[0] || 20;
             const number = Math.floor(Math.random() * sides) + 1;
