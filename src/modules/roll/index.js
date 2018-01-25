@@ -3,9 +3,11 @@ import command from '../../components/command'
 import axios from 'axios'
 
 export default module(
-    command('roll', 'Rolls a die. Optional parameter specifies sides - defaults to 20.', async (state, message, args) => {
+    command('roll',
+        'Rolls dice. Optional parameter is **n**d**s**, where **n** is number of dice and **s** is number of sides. Default is 1d20.',
+        async (state, message, args) => {
         try {
-            const formatted = args.split(' ')[0] || '1d20';
+            const formatted = args.split(' ')[0].toLowerCase() || '1d20';
             const parsed = formatted.split('d');
             const number = parsed[0];
             const sides = parsed[1];
