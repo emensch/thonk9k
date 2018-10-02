@@ -11,13 +11,13 @@ export default module(
                 'chromeo is better than niles (who the fuck is niles?)',
                 'Enyos are only good for one thing: Wrecks',
                 'Bulleit & Woodford are barely worthy of cleaning the oil stains off my driveway',
-                "i don't know military time...im like wait +5...carry the two...divide that by the coeficient of your mom",
+                'i don\'t know military time...im like wait +5...carry the two...divide that by the coeficient of your mom',
                 'MR XAVIER WAT TIME IS IT? THE CLOCK HAS NO SCREEN',
                 // i guess more stuff that triggers papa X goes here
             ];
 
             const selectedIndex = Math.floor(Math.random() * triggeringMessages.length);
-            const xavier = message.channel.guild.members.find(m => m.user.username === 'Xavier W')
+            const xavier = message.channel.guild.members.find(m => m.user.username === 'Xavier W');
             const prefix = xavier ? xavier + ' ' : '';
 
             message.channel.send(
